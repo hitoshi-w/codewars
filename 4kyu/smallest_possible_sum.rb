@@ -25,9 +25,35 @@
 # Additional notes:
 # There are performance tests consisted of very big numbers and arrays of size at least 30000. Please write an efficient algorithm to prevent timeout.
 
-require 'benchmark'
-numbers = (1..3000).to_a.shuffle
-result = Benchmark.realtime do
-  numbers.sum
+def divisor_func(a, b)
+  a, b = b, a if a > b
+  r = b % a
+  while(r != 0)
+    a, b = r, a
+    r = b % a
+  end
+  return a
 end
-p result
+
+def solution(numbers)
+  len = numbers.length
+
+  if len == 1
+    return numbers[0]
+  else
+    divisor = divisor_func(numbers[0], numbers[1])
+    if len == 2
+      return divisor * 2
+    else
+      for i in 2..(len-1)  do 
+        divisor = divisor_func(divisor, numbers[i])
+      end
+      return divisor * len
+    end
+  end
+end
+
+# best practice
+# def solution(n)
+#   n.reduce(:gcd) * n.size
+# end
